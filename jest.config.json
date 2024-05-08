@@ -1,0 +1,12 @@
+{
+  "testRegex": ".e2e-spec.ts$",
+  "maxWorkers": 1,
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "rootDir": "tests",
+  "moduleNameMapper": {
+    "@/(.*)": "<rootDir>../app/$1",
+    "@mocks": "<rootDir>../mocks/$1"
+  }
+}
