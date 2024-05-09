@@ -1,3 +1,7 @@
-import { User } from '@/models'
+import { Feature, Place, User } from '@/models'
 
-export const users: User[] = [{ id: '1' }]
+export const places: Place[] = []
+
+export const users: User[] = []
+
+export const features: Feature[] = []
