@@ -4,6 +4,7 @@ import { Field, InputType } from 'type-graphql'
 export class UserInput {
   @Field(() => String)
   firstName: string
+
   @Field(() => String)
   lastName: string
 }

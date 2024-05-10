@@ -8,14 +8,18 @@ export class PlaceFeature extends Base {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  place: Place
+  place: Promise<Place>
+  @Column({ nullable: false })
+  placeId: string
 
   @ManyToOne(() => Feature, {
     nullable: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  feature: Feature
+  feature: Promise<Feature>
+  @Column({ nullable: false })
+  featureId: string
 
   @Column({ nullable: false })
   available: boolean

@@ -17,7 +17,7 @@ export class FeatureResolver {
 
   @Mutation(() => ID)
   async updateFeature(
-    @Arg('id') id: string,
+    @Arg('id', () => ID) id: string,
     @Arg('input') input: FeatureInput
   ): Promise<string> {
     const feature = await Feature.findOneByOrFail({ id })
@@ -26,7 +26,7 @@ export class FeatureResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteFeature(@Arg('id') id: string): Promise<boolean> {
+  async deleteFeature(@Arg('id', () => ID) id: string): Promise<boolean> {
     const feature = await Feature.findOneByOrFail({ id })
     await Feature.remove(feature)
     return true

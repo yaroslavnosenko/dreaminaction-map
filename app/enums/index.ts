@@ -33,3 +33,14 @@ export enum PlaceType {
 registerEnumType(PlaceType, {
   name: 'PlaceType',
 })
+
+export enum PlaceAccessibility {
+  unknown = 0,
+  non_compliant = 1,
+  partially_compliant = 2,
+  compliant = 3,
+}
+
+registerEnumType(PlaceAccessibility, {
+  name: 'PlaceAccessibility',
+})

@@ -1,8 +1,7 @@
-import { PlaceType } from '@/enums'
-import { Base, Feature, User } from '@/models'
-import { Field, Float, Int, ObjectType } from 'type-graphql'
+import { PlaceAccessibility, PlaceType } from '@/enums'
+import { Base, Feature, PlaceFeature, User } from '@/models'
+import { Field, Float, ObjectType } from 'type-graphql'
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { PlaceFeature } from './place_feature'
 
 @ObjectType()
 @Entity()
@@ -23,15 +22,15 @@ export class Place extends Base {
   @Column('double', { nullable: false })
   lng: number
 
-  @Field(() => Int)
-  @Column('int', { nullable: false, default: 0 })
-  availability: number
+  @Field(() => PlaceAccessibility, { nullable: false, defaultValue: 0 })
+  @Column('int')
+  accessibility: PlaceAccessibility
 
   // Nullable
 
   @Field(() => String, { nullable: true })
   @Column('text')
-  description: string
+  description: string | null
 
   // Relations
 
@@ -46,7 +45,7 @@ export class Place extends Base {
   // Features
 
   @OneToMany(() => PlaceFeature, (placeFeature) => placeFeature.place)
-  placeFeature: PlaceFeature[]
+  placeFeature: Promise<PlaceFeature[]>
 
   @Field(() => [Feature])
   availableFeatures: Feature[]
