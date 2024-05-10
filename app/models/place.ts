@@ -22,14 +22,14 @@ export class Place extends Base {
   @Column('double', { nullable: false })
   lng: number
 
-  @Field(() => PlaceAccessibility, { nullable: false, defaultValue: 0 })
-  @Column('int')
+  @Field(() => PlaceAccessibility, { nullable: false })
+  @Column('int', { default: 0 })
   accessibility: PlaceAccessibility
 
   // Nullable
 
   @Field(() => String, { nullable: true })
-  @Column('text')
+  @Column('text', { nullable: true })
   description: string | null
 
   // Relations

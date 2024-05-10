@@ -7,3 +7,9 @@ export type AppContext = {
 export type JwtPayload = {
   uid: string
 }
+
+export type ProviderUser = {
+  email: string
+  firstName?: string
+  lastName?: string
+}

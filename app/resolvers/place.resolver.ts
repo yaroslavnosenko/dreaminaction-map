@@ -1,27 +1,43 @@
-import { PlaceAccessibility } from '@/enums'
-import { FeatureAvailabilityInput, PlaceInput } from '@/inputs'
+import { OwnerAnd } from '@/auth'
+import { PlaceAccessibility, UserRole } from '@/enums'
+import { FeatureAvailabilityInput, LocationInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
 import {
   Arg,
+  Authorized,
   FieldResolver,
   ID,
   Mutation,
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from 'type-graphql'
 import { In } from 'typeorm'
 
 @Resolver(() => Place)
 export class PlaceResolver {
   @Query(() => [Place])
+  @Authorized([UserRole.admin, UserRole.manager])
   places(): Promise<Place[]> {
+    return Place.find()
+  }
+
+  @Query(() => [Place])
+  placesByLocation(@Arg('input') input: LocationInput): Promise<Place[]> {
     return Place.find()
   }
 
   @Query(() => Place, { nullable: true })
   place(@Arg('id', () => ID) id: string): Promise<Place | null> {
     return Place.findOneBy({ id })
+  }
+
+  @FieldResolver(() => [User])
+  @Authorized([UserRole.admin, UserRole.manager])
+  async owner(@Root() place: Place): Promise<User> {
+    const owner = await place.owner
+    return owner
   }
 
   @FieldResolver(() => [Feature])
@@ -43,6 +59,8 @@ export class PlaceResolver {
   }
 
   @Mutation(() => ID)
+  @Authorized()
+  @UseMiddleware(OwnerAnd([UserRole.admin]))
   async createPlace(
     @Arg('userId', () => ID) userId: string,
     @Arg('input') input: PlaceInput
@@ -55,6 +73,8 @@ export class PlaceResolver {
   }
 
   @Mutation(() => ID)
+  @Authorized()
+  @UseMiddleware(OwnerAnd([UserRole.admin]))
   async updatePlace(
     @Arg('id', () => ID) id: string,
     @Arg('input') input: PlaceInput
@@ -65,6 +85,8 @@ export class PlaceResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized()
+  @UseMiddleware(OwnerAnd([UserRole.admin]))
   async deletePlace(@Arg('id', () => ID) id: string): Promise<boolean> {
     const place = await Place.findOneByOrFail({ id })
     await place.remove()
@@ -72,6 +94,7 @@ export class PlaceResolver {
   }
 
   @Mutation(() => PlaceAccessibility)
+  @Authorized([UserRole.admin, UserRole.manager])
   async updatePlaceAccessibility(
     @Arg('id', () => ID) id: string,
     @Arg('accessibility', () => PlaceAccessibility)
@@ -83,6 +106,7 @@ export class PlaceResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized([UserRole.admin, UserRole.manager])
   async updatePlaceFeatures(
     @Arg('id', () => ID) id: string,
     @Arg('input', () => [FeatureAvailabilityInput])
