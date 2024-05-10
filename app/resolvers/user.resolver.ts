@@ -1,5 +1,5 @@
 import { UserRole } from '@/enums'
-import { AuthInput, UserInput } from '@/inputs'
+import { UserInput } from '@/inputs'
 import { User } from '@/models'
 import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql'
 
@@ -41,10 +41,5 @@ export class UserResolver {
     user.role = role
     await user.save()
     return role
-  }
-
-  @Mutation(() => String)
-  async auth(@Arg('input') input: AuthInput): Promise<string> {
-    return input.token
   }
 }

@@ -1,7 +1,14 @@
 import 'reflect-metadata'
 
+import { getUserByJwt } from '@/auth'
 import { AppDataSource } from '@/database'
-import { FeatureResolver, PlaceResolver, UserResolver } from '@/resolvers'
+import {
+  AuthResolver,
+  FeatureResolver,
+  PlaceResolver,
+  UserResolver,
+} from '@/resolvers'
+import { AppContext } from '@/types'
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { GraphQLError, GraphQLFormattedError } from 'graphql'
@@ -21,9 +28,16 @@ const formatError = (
 export const createApolloServer = async ({ port }) => {
   await AppDataSource.initialize()
   const schema = await buildSchema({
-    resolvers: [UserResolver, PlaceResolver, FeatureResolver],
+    resolvers: [AuthResolver, UserResolver, PlaceResolver, FeatureResolver],
   })
-  const server = new ApolloServer({ schema, formatError })
-  const { url } = await startStandaloneServer(server, { listen: { port } })
+  const server = new ApolloServer<AppContext>({ schema, formatError })
+  const { url } = await startStandaloneServer(server, {
+    context: async ({ req }): Promise<AppContext> => {
+      const token: string = req.headers.authorization?.split(' ')[1] || ''
+      const user = await getUserByJwt(token)
+      return { user }
+    },
+    listen: { port },
+  })
   return { server, url }
 }
