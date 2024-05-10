@@ -1,4 +1,5 @@
 export * from './base'
 export * from './feature'
 export * from './place'
+export * from './place_feature'
 export * from './user'

@@ -1,7 +1,8 @@
 import { PlaceType } from '@/enums'
-import { Base, User } from '@/models'
+import { Base, Feature, User } from '@/models'
 import { Field, Float, Int, ObjectType } from 'type-graphql'
-import { Column, Entity, ManyToOne } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
+import { PlaceFeature } from './place_feature'
 
 @ObjectType()
 @Entity()
@@ -26,14 +27,30 @@ export class Place extends Base {
   @Column('int', { nullable: false, default: 0 })
   availability: number
 
-  @ManyToOne(() => User, (user) => user.places, {
-    nullable: false,
-    cascade: true,
-  })
-  @Field(() => User)
-  owner: Promise<User>
+  // Nullable
 
   @Field(() => String, { nullable: true })
   @Column('text')
   description: string
+
+  // Relations
+
+  @ManyToOne(() => User, (user) => user.places, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @Field(() => User)
+  owner: Promise<User>
+
+  // Features
+
+  @OneToMany(() => PlaceFeature, (placeFeature) => placeFeature.place)
+  placeFeature: PlaceFeature[]
+
+  @Field(() => [Feature])
+  availableFeatures: Feature[]
+
+  @Field(() => [Feature])
+  unavailableFeatures: Feature[]
 }
