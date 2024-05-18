@@ -1,4 +1,4 @@
-import { PlaceAccessibility, PlaceType } from '@/enums'
+import { Accessibility, Category } from '@/enums'
 import { Base, Feature, PlaceFeature, User } from '@/models'
 import { Field, Float, ObjectType } from 'type-graphql'
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
@@ -6,9 +6,9 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
 @ObjectType()
 @Entity()
 export class Place extends Base {
-  @Field(() => PlaceType)
+  @Field(() => Category)
   @Column({ nullable: false })
-  type: PlaceType
+  category: Category
 
   @Field(() => String)
   @Column({ nullable: false })
@@ -22,9 +22,9 @@ export class Place extends Base {
   @Column('double', { nullable: false })
   lng: number
 
-  @Field(() => PlaceAccessibility, { nullable: false })
+  @Field(() => Accessibility, { nullable: false })
   @Column('int', { default: 0 })
-  accessibility: PlaceAccessibility
+  accessibility: Accessibility
 
   // Nullable
 

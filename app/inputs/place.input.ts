@@ -1,10 +1,10 @@
-import { PlaceType } from '@/enums'
+import { Category } from '@/enums'
 import { Field, Float, InputType } from 'type-graphql'
 
 @InputType()
 export class PlaceInput {
-  @Field(() => PlaceType)
-  type: PlaceType
+  @Field(() => Category)
+  category: Category
 
   @Field(() => String)
   name: string

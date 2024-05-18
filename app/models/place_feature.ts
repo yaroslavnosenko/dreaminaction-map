@@ -1,7 +1,8 @@
 import { Base, Feature, Place } from '@/models'
-import { Column, Entity, ManyToOne } from 'typeorm'
+import { Column, Entity, ManyToOne, Unique } from 'typeorm'
 
 @Entity()
+@Unique(['place', 'feature'])
 export class PlaceFeature extends Base {
   @ManyToOne(() => Place, {
     nullable: false,

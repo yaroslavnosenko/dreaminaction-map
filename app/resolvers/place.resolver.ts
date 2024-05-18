@@ -1,5 +1,5 @@
 import { OwnerAnd } from '@/auth'
-import { PlaceAccessibility, UserRole } from '@/enums'
+import { Accessibility, UserRole } from '@/enums'
 import { FeatureAvailabilityInput, LocationInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
 import {
@@ -93,12 +93,12 @@ export class PlaceResolver {
     return true
   }
 
-  @Mutation(() => PlaceAccessibility)
+  @Mutation(() => Accessibility)
   @Authorized([UserRole.admin, UserRole.manager])
   async updatePlaceAccessibility(
     @Arg('id', () => ID) id: string,
-    @Arg('accessibility', () => PlaceAccessibility)
-    accessibility: PlaceAccessibility
+    @Arg('accessibility', () => Accessibility)
+    accessibility: Accessibility
   ): Promise<number> {
     const place = await Place.findOneByOrFail({ id })
     await Place.create({ ...place, accessibility }).save()

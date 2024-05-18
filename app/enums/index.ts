@@ -19,28 +19,28 @@ registerEnumType(UserRole, {
   name: 'UserRole',
 })
 
-export enum PlaceType {
+export enum Category {
   food = 'food',
   drinks = 'drinks',
   groceries = 'groceries',
   shopping = 'shopping',
-  services = 'services',
   health = 'health',
   hotels = 'hotels',
   transport = 'transport',
+  sites = 'sites',
 }
 
-registerEnumType(PlaceType, {
-  name: 'PlaceType',
+registerEnumType(Category, {
+  name: 'Category',
 })
 
-export enum PlaceAccessibility {
+export enum Accessibility {
   unknown = 0,
   non_compliant = 1,
   partially_compliant = 2,
   compliant = 3,
 }
 
-registerEnumType(PlaceAccessibility, {
-  name: 'PlaceAccessibility',
+registerEnumType(Accessibility, {
+  name: 'Accessibility',
 })
