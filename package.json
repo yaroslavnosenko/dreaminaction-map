@@ -4,7 +4,7 @@
   "main": "app/index.ts",
   "scripts": {
     "start": "ts-node app/index.ts",
-    "start:dev": "ts-node-dev -r tsconfig-paths/register app/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register app/index.ts",
     "test": "jest",
     "test:dev": "jest --watch"
   },
