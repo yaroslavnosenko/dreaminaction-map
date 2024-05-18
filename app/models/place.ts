@@ -1,6 +1,6 @@
 import { Accessibility, Category } from '@/enums'
 import { Base, Feature, PlaceFeature, User } from '@/models'
-import { Field, Float, ObjectType } from 'type-graphql'
+import { Field, Float, Int, ObjectType } from 'type-graphql'
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
 
 @ObjectType()
@@ -39,7 +39,7 @@ export class Place extends Base {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @Field(() => User)
+  @Field(() => User, { description: 'Admin and Manager only' })
   owner: Promise<User>
 
   // Features
@@ -52,4 +52,7 @@ export class Place extends Base {
 
   @Field(() => [Feature])
   unavailableFeatures: Feature[]
+
+  @Field(() => Int)
+  featuresCount: number
 }

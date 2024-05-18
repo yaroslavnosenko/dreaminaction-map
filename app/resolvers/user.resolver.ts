@@ -14,20 +14,23 @@ import {
 
 @Resolver(() => User)
 export class UserResolver {
-  @Query(() => [User])
+  @Query(() => [User], { description: 'Admin and Manager only' })
   @Authorized([UserRole.admin, UserRole.manager])
   users(): Promise<User[]> {
     return User.find()
   }
 
-  @Query(() => User, { nullable: true })
+  @Query(() => User, {
+    nullable: true,
+    description: 'Admin, Manager and Me only',
+  })
   @Authorized()
   @UseMiddleware(MeAnd([UserRole.admin, UserRole.manager]))
   async user(@Arg('id', () => ID) id: string): Promise<User | null> {
     return User.findOneBy({ id })
   }
 
-  @Mutation(() => ID)
+  @Mutation(() => ID, { description: 'Admin and Me only' })
   @Authorized()
   @UseMiddleware(MeAnd([UserRole.admin]))
   async updateUser(
@@ -39,7 +42,7 @@ export class UserResolver {
     return id
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: 'Admin only' })
   @Authorized()
   @UseMiddleware(MeAnd([UserRole.admin]))
   async deleteUser(@Arg('id', () => ID) id: string): Promise<boolean> {
@@ -48,7 +51,7 @@ export class UserResolver {
     return true
   }
 
-  @Mutation(() => UserRole)
+  @Mutation(() => UserRole, { description: 'Admin only' })
   @Authorized([UserRole.admin])
   async updateUserRole(
     @Arg('id', () => ID) id: string,

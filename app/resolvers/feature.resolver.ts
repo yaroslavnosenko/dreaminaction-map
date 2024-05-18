@@ -10,14 +10,14 @@ export class FeatureResolver {
     return Feature.find()
   }
 
-  @Mutation(() => ID)
+  @Mutation(() => ID, { description: 'Admin only' })
   @Authorized([UserRole.admin])
   async createFeature(@Arg('input') input: FeatureInput): Promise<string> {
     const { id } = await Feature.create({ ...input }).save()
     return id
   }
 
-  @Mutation(() => ID)
+  @Mutation(() => ID, { description: 'Admin only' })
   @Authorized([UserRole.admin])
   async updateFeature(
     @Arg('id', () => ID) id: string,
@@ -28,7 +28,7 @@ export class FeatureResolver {
     return id
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: 'Admin only' })
   @Authorized([UserRole.admin])
   async deleteFeature(@Arg('id', () => ID) id: string): Promise<boolean> {
     const feature = await Feature.findOneByOrFail({ id })
