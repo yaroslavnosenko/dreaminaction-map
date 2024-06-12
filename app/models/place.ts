@@ -14,6 +14,10 @@ export class Place extends Base {
   @Column({ nullable: false })
   name: string
 
+  @Field(() => String)
+  @Column({ nullable: false })
+  address: string
+
   @Field(() => Float)
   @Column('double', { nullable: false })
   lat: number
