@@ -5,6 +5,7 @@ import { AppDataSource } from '@/database'
 import {
   AuthResolver,
   FeatureResolver,
+  MockResolver,
   PlaceResolver,
   UserResolver,
 } from '@/resolvers'
@@ -37,7 +38,13 @@ const context = async ({ req }): Promise<AppContext> => {
 export const createApolloServer = async ({ port }) => {
   await AppDataSource.initialize()
   const schema = await buildSchema({
-    resolvers: [AuthResolver, UserResolver, PlaceResolver, FeatureResolver],
+    resolvers: [
+      AuthResolver,
+      UserResolver,
+      PlaceResolver,
+      FeatureResolver,
+      MockResolver,
+    ],
     authChecker: appAuthChecker,
   })
   const server = new ApolloServer<AppContext>({ schema, formatError })

@@ -1,6 +1,6 @@
 import { OwnerAnd } from '@/auth'
 import { Accessibility, UserRole } from '@/enums'
-import { FeatureAvailabilityInput, LocationInput, PlaceInput } from '@/inputs'
+import { BoundsInput, FeatureAvailabilityInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
 import {
   Arg,
@@ -25,7 +25,7 @@ export class PlaceResolver {
   }
 
   @Query(() => [Place])
-  placesByLocation(@Arg('input') input: LocationInput): Promise<Place[]> {
+  placesByBounds(@Arg('input') input: BoundsInput): Promise<Place[]> {
     return Place.find()
   }
 

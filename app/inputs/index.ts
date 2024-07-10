@@ -1,5 +1,5 @@
 export * from './auth.input'
+export * from './bounds.input'
 export * from './feature.input'
-export * from './location.input'
 export * from './place.input'
 export * from './user.input'

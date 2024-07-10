@@ -7,7 +7,6 @@ export const OwnerAnd = (roles: UserRole[]): MiddlewareFn<AppContext> => {
   return async ({ args, context: { user } }, next) => {
     if (roles.includes(user.role)) return next()
 
-    // create place flow
     const userId = args['userId']
     if (userId && userId !== user.id) {
       throw new AuthorizationError()

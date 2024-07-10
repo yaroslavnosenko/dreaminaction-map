@@ -45,6 +45,8 @@ export class Place extends Base {
   })
   @Field(() => User, { description: 'Admin and Manager only' })
   owner: Promise<User>
+  @Column({ nullable: false })
+  ownerId: string
 
   // Features
 
