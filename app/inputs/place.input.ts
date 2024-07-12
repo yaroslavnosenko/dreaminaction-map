@@ -9,6 +9,12 @@ export class PlaceInput {
   @Field(() => String)
   name: string
 
+  @Field(() => String)
+  address: string
+
+  @Field(() => String, { nullable: true })
+  description?: string
+
   @Field(() => Float)
   lat: number
 
