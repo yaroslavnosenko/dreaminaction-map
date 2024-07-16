@@ -1,4 +1,5 @@
 import { OwnerAnd } from '@/auth'
+import { AppDataSource } from '@/database'
 import { Accessibility, UserRole } from '@/enums'
 import { BoundsInput, FeatureAvailabilityInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
@@ -26,7 +27,13 @@ export class PlaceResolver {
 
   @Query(() => [Place])
   placesByBounds(@Arg('input') input: BoundsInput): Promise<Place[]> {
-    return Place.find()
+    const { swLat, swLng, neLat, neLng } = input
+    return AppDataSource.getRepository(Place)
+      .createQueryBuilder('place')
+      .where('place.lat BETWEEN :swLat AND :neLat', { swLat, neLat })
+      .andWhere('place.lng BETWEEN :swLng AND :neLng', { swLng, neLng })
+      .limit(100)
+      .getMany()
   }
 
   @Query(() => Place, { nullable: true })
