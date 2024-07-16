@@ -1,5 +1,4 @@
 import { OwnerAnd } from '@/auth'
-import { AppDataSource } from '@/database'
 import { Accessibility, UserRole } from '@/enums'
 import { BoundsInput, FeatureAvailabilityInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
@@ -15,25 +14,30 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql'
-import { In } from 'typeorm'
+import { Between, In, Like } from 'typeorm'
 
 @Resolver(() => Place)
 export class PlaceResolver {
   @Query(() => [Place], { description: 'Admin and Manager only' })
   @Authorized([UserRole.admin, UserRole.manager])
-  places(): Promise<Place[]> {
-    return Place.find()
+  places(
+    @Arg('query', () => String, { nullable: true }) query?: string
+  ): Promise<Place[]> {
+    return query
+      ? Place.find({
+          where: [{ name: Like(query) }, { address: Like(query) }],
+          take: 30,
+        })
+      : Place.find({ take: 30 })
   }
 
   @Query(() => [Place])
   placesByBounds(@Arg('input') input: BoundsInput): Promise<Place[]> {
     const { swLat, swLng, neLat, neLng } = input
-    return AppDataSource.getRepository(Place)
-      .createQueryBuilder('place')
-      .where('place.lat BETWEEN :swLat AND :neLat', { swLat, neLat })
-      .andWhere('place.lng BETWEEN :swLng AND :neLng', { swLng, neLng })
-      .limit(100)
-      .getMany()
+    return Place.find({
+      where: [{ lat: Between(swLat, neLat), lng: Between(swLng, neLng) }],
+      take: 100,
+    })
   }
 
   @Query(() => Place, { nullable: true })

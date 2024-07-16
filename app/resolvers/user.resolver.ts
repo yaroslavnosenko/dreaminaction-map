@@ -11,13 +11,25 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql'
+import { Like } from 'typeorm'
 
 @Resolver(() => User)
 export class UserResolver {
   @Query(() => [User], { description: 'Admin and Manager only' })
   @Authorized([UserRole.admin, UserRole.manager])
-  users(): Promise<User[]> {
-    return User.find()
+  users(
+    @Arg('query', () => String, { nullable: true }) query?: string
+  ): Promise<User[]> {
+    return query
+      ? User.find({
+          where: [
+            { email: Like(query) },
+            { firstName: Like(query) },
+            { lastName: Like(query) },
+          ],
+          take: 30,
+        })
+      : User.find({ take: 30 })
   }
 
   @Query(() => User, {
