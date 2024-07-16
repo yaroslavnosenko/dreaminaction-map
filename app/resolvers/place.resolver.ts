@@ -61,10 +61,7 @@ export class PlaceResolver {
 
   @FieldResolver(() => Int)
   async featuresCount(@Root() place: Place): Promise<number> {
-    const [_, count] = await PlaceFeature.findAndCountBy({
-      placeId: place.id,
-    })
-    return count
+    return await PlaceFeature.countBy({ placeId: place.id })
   }
 
   @FieldResolver(() => [Feature])
