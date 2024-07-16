@@ -1,4 +1,5 @@
 import { OwnerAnd } from '@/auth'
+import { ILike } from '@/database'
 import { Accessibility, UserRole } from '@/enums'
 import { BoundsInput, FeatureAvailabilityInput, PlaceInput } from '@/inputs'
 import { Feature, Place, PlaceFeature, User } from '@/models'
@@ -14,7 +15,7 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql'
-import { Between, ILike, In } from 'typeorm'
+import { Between, In } from 'typeorm'
 
 @Resolver(() => Place)
 export class PlaceResolver {
@@ -25,10 +26,7 @@ export class PlaceResolver {
   ): Promise<Place[]> {
     return query
       ? Place.find({
-          where: [
-            { name: ILike(`%${query}%`) },
-            { address: ILike(`%${query}%`) },
-          ],
+          where: [{ name: ILike(query) }, { address: ILike(query) }],
           take: 30,
         })
       : Place.find({ take: 30 })

@@ -1,4 +1,5 @@
 import { MeAnd } from '@/auth'
+import { ILike } from '@/database'
 import { UserRole } from '@/enums'
 import { UserInput } from '@/inputs'
 import { User } from '@/models'
@@ -11,7 +12,6 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql'
-import { ILike } from 'typeorm'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -23,9 +23,9 @@ export class UserResolver {
     return query
       ? User.find({
           where: [
-            { email: ILike(`%${query}%`) },
-            { firstName: ILike(`%${query}%`) },
-            { lastName: ILike(`%${query}%`) },
+            { email: ILike(query) },
+            { firstName: ILike(query) },
+            { lastName: ILike(query) },
           ],
           take: 30,
         })
