@@ -22,14 +22,20 @@ export class PlaceResolver {
   @Query(() => [Place], { description: 'Admin and Manager only' })
   @Authorized([UserRole.admin, UserRole.manager])
   places(
-    @Arg('query', () => String, { nullable: true }) query?: string
+    @Arg('query', () => String, { nullable: true }) query?: string,
+    @Arg('accessibilities', () => [Accessibility], { nullable: true })
+    accessibilities?: Accessibility[]
   ): Promise<Place[]> {
+    const baseWhere = { accessibility: In(accessibilities) }
     return query
       ? Place.find({
-          where: [{ name: ILike(query) }, { address: ILike(query) }],
+          where: [
+            { ...baseWhere, name: ILike(query) },
+            { ...baseWhere, address: ILike(query) },
+          ],
           take: 30,
         })
-      : Place.find({ take: 30 })
+      : Place.find({ where: [baseWhere], take: 30 })
   }
 
   @Query(() => [Place])
