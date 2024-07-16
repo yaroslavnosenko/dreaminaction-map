@@ -11,7 +11,7 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql'
-import { Like } from 'typeorm'
+import { ILike } from 'typeorm'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -23,9 +23,9 @@ export class UserResolver {
     return query
       ? User.find({
           where: [
-            { email: Like(query) },
-            { firstName: Like(query) },
-            { lastName: Like(query) },
+            { email: ILike(`%${query}%`) },
+            { firstName: ILike(`%${query}%`) },
+            { lastName: ILike(`%${query}%`) },
           ],
           take: 30,
         })

@@ -14,7 +14,7 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql'
-import { Between, In, Like } from 'typeorm'
+import { Between, ILike, In } from 'typeorm'
 
 @Resolver(() => Place)
 export class PlaceResolver {
@@ -25,7 +25,10 @@ export class PlaceResolver {
   ): Promise<Place[]> {
     return query
       ? Place.find({
-          where: [{ name: Like(query) }, { address: Like(query) }],
+          where: [
+            { name: ILike(`%${query}%`) },
+            { address: ILike(`%${query}%`) },
+          ],
           take: 30,
         })
       : Place.find({ take: 30 })
